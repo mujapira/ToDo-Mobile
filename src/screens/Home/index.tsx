@@ -18,6 +18,7 @@ import { updateTask } from '@storage/tasks/updateTask';
 export function Home() {
   const newTaskInputRef = useRef<TextInput>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const newTaskNameInputRef = useRef<TextInput>(null)
   const [newTaskName, setNewTaskName] = useState<string>()
   const [taskList, setTaskList] = useState<ITask[]>([])
   const [doneTasksCounter, setDoneTasksCounter] = useState(0)
@@ -51,6 +52,7 @@ export function Home() {
         }
         await createTask(newTaskName!)
         setNewTaskName('')
+        newTaskNameInputRef.current?.blur()
 
     } catch (error) {
       if(error instanceof AppError) {
@@ -99,7 +101,7 @@ export function Home() {
 
       <S.InputContainer>
         <Input 
-            inputRef={newTaskInputRef}
+            inputRef={newTaskNameInputRef}
             onChangeText={setNewTaskName}
             value={newTaskName}
             placeholder="Adicione uma nova tarefa"
