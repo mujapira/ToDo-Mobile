@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TASKS_COLLECTION } from "@storage/storageConfig";
 
 export interface ITask {
-    id?: number;
+    id?: string;
     isDone: boolean;
     title: string;
 }

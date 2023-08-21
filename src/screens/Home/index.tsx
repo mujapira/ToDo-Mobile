@@ -12,6 +12,8 @@ import { AppError } from '@utils/AppError';
 import { getTasks } from '@storage/tasks/getTasks';
 
 import { ITask } from '@storage/tasks/getTasks';
+import { deleteTask } from '@storage/tasks/deleteTask';
+import { updateTask } from '@storage/tasks/updateTask';
 
 export function Home() {
   const newTaskInputRef = useRef<TextInput>(null)
@@ -43,6 +45,7 @@ export function Home() {
 
   async function handleAddNewTask(){
     try {
+        setIsLoading(true)
         if (newTaskName!.trim().length === 0) {
           return Alert.alert('Home', 'A task não pode ser vazia')
         }
@@ -56,15 +59,33 @@ export function Home() {
         Alert.alert('Home', 'Erro ao criar task')
         console.log(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  function handleCheckTask(id: number){
 
+  async function handleDeleteTask(taskId: string) {
+    try {
+      setIsLoading(true)
+      await deleteTask(taskId)
+    } catch (error) {
+      Alert.alert('Home', 'Erro ao remover a pessoa selecionada')
+    } finally {
+      setIsLoading(false)
+    }
   }
+  
 
-  function handleDeleteTask(id: number){
-
+  async function handleUpdateTask(id: string){
+    try {
+      setIsLoading(true)
+     await updateTask(id)
+    } catch {
+      Alert.alert('Home', 'Erro ao atualizar o estado da tarefa')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(()=> {
@@ -123,6 +144,8 @@ export function Home() {
           <Task
             isDone={item.isDone}
             title={item.title} 
+            deleteTask={() => handleDeleteTask(item.id!)}
+            updateTask={() => handleUpdateTask(item.id!)}
           /> 
           )}
         />  
