@@ -5,20 +5,22 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components/native';
 
 interface TaskProps {
-    isDone: boolean;
+    id?: number;
+    isDone?: boolean;
+    title?: string;
 }
 
-export function Task({isDone = false}:TaskProps){
+export function Task({isDone = false, id}:TaskProps){
     const { COLORS } = useTheme()
     return (
-        <S.TaskContainer>
+        <S.TaskContainer key={id}>
             <S.ActionContainer>
                 <S.DoneButton isDone={isDone} onPress={()=> {}}>
                         <Ionicons name="checkmark-sharp" color={isDone ? COLORS.GRAY_100 : 'transparent'}/>
                 </S.DoneButton>
             </S.ActionContainer>
 
-            <S.Title>
+            <S.Title isDone={isDone}>
                 Integer urna interdum massa libero auctor neque turpis turpis semper. semper. 
             </S.Title>
 

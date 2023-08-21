@@ -1,7 +1,7 @@
-import { Text, TextInput, View } from 'react-native';
+import { FlatList, ListRenderItemInfo, Text, TextInput, View } from 'react-native';
 import * as S from './styles';
 import { Header } from '@components/Header';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Input } from '@components/Input';
 import { ButtonIcon } from '@components/ButtonIcon';
 import { useTheme } from 'styled-components/native';
@@ -11,8 +11,8 @@ import { EmptyTask } from '@components/EmptyTask';
 
 type Task = {
   id: number;
-  name: string;
-  status: "DONE" |  "TODO";
+  isDone: boolean;
+  title: string;
 }
 
 export function Home() {
@@ -21,6 +21,43 @@ export function Home() {
   const [taskList, setTaskList] = useState<Task[]>([])
   const [doneTasksCounter, setDoneTasksCounter] = useState(0)
   const [createdTasksCounter, setCreatedTasksCounter] = useState(0)
+
+  function handleCheckTask(id: number){
+
+  }
+  function handleDeleteTask(id: number){
+
+  }
+
+  useEffect(()=> {
+    setTaskList([
+      {
+        id: 1,
+        isDone: true,
+        title: "Fazer compras"
+      },
+      {
+        id: 2,
+        isDone: true,
+        title: "Estudar para a prova"
+      },
+      {
+        id: 3,
+        isDone: false,
+        title: "Ler livro novo"
+      },
+      {
+        id: 4,
+        isDone: true,
+        title: "Ir à academia"
+      },
+      {
+        id: 5,
+        isDone: false,
+        title: "Assistir filme"
+      }
+    ])
+  },[])
 
   return (
     <S.Container>
@@ -43,7 +80,7 @@ export function Home() {
           />
       </S.InputContainer>
 
-    <S.TaskList>
+    <S.TaskListContainer>
       <S.TaskListHeader>
         <S.TasksCounter>
           <S.CreatedTasksSpan>Criadas</S.CreatedTasksSpan>
@@ -65,12 +102,23 @@ export function Home() {
       </S.TaskListHeader>
 
 
-      {taskList.length > 0 
-        ? <Task isDone={true}/>  
-        : <Task isDone={true}/> 
+      {taskList.length > 0
+        ? 
+        <FlatList 
+        data={taskList}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <Task
+            isDone={item.isDone}
+            title={item.title} 
+          /> 
+          )}
+        />  
+        : 
+        <EmptyTask /> 
       }
 
-      </S.TaskList>
+      </S.TaskListContainer>
       </S.Content>
     </S.Container>    
   );

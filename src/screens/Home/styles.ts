@@ -26,11 +26,17 @@ export const InputContainer = styled.View`
     margin: 0 24px;
 `;
 
-export const TaskList = styled.View`
+export const TaskListContainer = styled.View`
     flex: 1;
     gap: 20px;
     justify-content: start;
 `
+type Task = {
+    id: number;
+    isDone: boolean;
+    title: string;
+  }
+
 
 export const TaskListHeader = styled.View`
     flex-direction: row;

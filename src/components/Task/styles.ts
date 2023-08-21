@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 
@@ -11,10 +11,16 @@ export const TaskContainer = styled.View`
     padding: 12px;
     background-color: ${props => props.theme.COLORS.GRAY_500};
     border-radius: 8px;
+    margin-bottom: 8px;
 `
 
-export const Title = styled.Text`
-    color: ${props => props.theme.COLORS.GRAY_100};
+type DoneTitleProps = {
+    isDone: boolean;
+}
+
+export const Title = styled(Text)<DoneTitleProps>`
+    color: ${props => props.isDone ?  props.theme.COLORS.GRAY_300 : props.theme.COLORS.GRAY_100};
+    text-decoration: ${props => props.isDone ? 'line-through' : 'none' };
     flex: 1;
     padding: 0 8px;
 `
@@ -26,7 +32,7 @@ export const ActionContainer = styled.View`
 
 type DoneButtonProps = {
     isDone: boolean;
-  }
+}
 
 export const DoneButton = styled(TouchableOpacity)<DoneButtonProps>`
     border: 2px solid ${props => props.isDone ? props.theme.COLORS.PURPLE_DARK : props.theme.COLORS.BLUE};
