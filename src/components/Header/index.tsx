@@ -3,11 +3,8 @@ import * as S from "./styles";
 
 import logoImg from '@assets/logo.png';
 
-type Props = {
-  isButtonVisible?: boolean;
-}
 
-export function Header({isButtonVisible = false} : Props) {
+export function Header() {
   const navigation = useNavigation()
 
   function handleGoBack() {
@@ -17,13 +14,9 @@ export function Header({isButtonVisible = false} : Props) {
 
   return (
     <S.Container>
-      {
-        isButtonVisible && 
         <S.ButtonWrapper onPress={handleGoBack}>
-          <S.Icon />
+          <S.Logo source={logoImg} />
         </S.ButtonWrapper>
-      }
-      <S.Logo source={logoImg} />
     </S.Container>
   )
 } 
