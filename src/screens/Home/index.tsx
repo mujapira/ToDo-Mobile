@@ -25,6 +25,14 @@ export function Home() {
     try {
       setIsLoading(true)
       const data = await getTasks()
+      let doneCount = 0;
+      taskList.forEach(task => {
+        if (task.isDone) {
+            doneCount++;
+        }
+      });
+      setDoneTasksCounter(doneCount);
+      setCreatedTasksCounter(data.length);
       setTaskList(data)
     } catch (error) {
       console.log(error)
