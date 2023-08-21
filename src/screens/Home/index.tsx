@@ -1,63 +1,67 @@
-import { FlatList, ListRenderItemInfo, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, ListRenderItemInfo, Text, TextInput, View } from 'react-native';
 import * as S from './styles';
 import { Header } from '@components/Header';
 import { useEffect, useRef, useState } from 'react';
 import { Input } from '@components/Input';
 import { ButtonIcon } from '@components/ButtonIcon';
-import { useTheme } from 'styled-components/native';
 
 import { Task } from '@components/Task';
 import { EmptyTask } from '@components/EmptyTask';
+import { createTask } from '@storage/tasks/createTask';
+import { AppError } from '@utils/AppError';
+import { getTasks } from '@storage/tasks/getTasks';
 
-type Task = {
-  id: number;
-  isDone: boolean;
-  title: string;
-}
+import { ITask } from '@storage/tasks/getTasks';
 
 export function Home() {
   const newTaskInputRef = useRef<TextInput>(null)
-  const [newTaskName, setNewTaskName] = useState('')
-  const [taskList, setTaskList] = useState<Task[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [newTaskName, setNewTaskName] = useState<string>()
+  const [taskList, setTaskList] = useState<ITask[]>([])
   const [doneTasksCounter, setDoneTasksCounter] = useState(0)
   const [createdTasksCounter, setCreatedTasksCounter] = useState(0)
+
+  async function fetchTasks() {
+    try {
+      setIsLoading(true)
+      const data = await getTasks()
+      setTaskList(data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleAddNewTask(){
+    try {
+        if (newTaskName!.trim().length === 0) {
+          return Alert.alert('Home', 'A task não pode ser vazia')
+        }
+        await createTask(newTaskName!)
+        setNewTaskName('')
+
+    } catch (error) {
+      if(error instanceof AppError) {
+        Alert.alert('Home', error.message)
+      } else {
+        Alert.alert('Home', 'Erro ao criar task')
+        console.log(error)
+      }
+    }
+  }
 
   function handleCheckTask(id: number){
 
   }
+
   function handleDeleteTask(id: number){
 
   }
 
   useEffect(()=> {
-    setTaskList([
-      {
-        id: 1,
-        isDone: true,
-        title: "Fazer compras"
-      },
-      {
-        id: 2,
-        isDone: true,
-        title: "Estudar para a prova"
-      },
-      {
-        id: 3,
-        isDone: false,
-        title: "Ler livro novo"
-      },
-      {
-        id: 4,
-        isDone: true,
-        title: "Ir à academia"
-      },
-      {
-        id: 5,
-        isDone: false,
-        title: "Assistir filme"
-      }
-    ])
-  },[])
+    fetchTasks()
+  },[taskList])
 
   return (
     <S.Container>
@@ -71,11 +75,11 @@ export function Home() {
             value={newTaskName}
             placeholder="Adicione uma nova tarefa"
             autoCorrect={false}
-            onSubmitEditing={()=> {}}
+            onSubmitEditing={()=> handleAddNewTask()}
             returnKeyType="done"
           />
         <ButtonIcon 
-          onPress={() => {}}
+          onPress={() => handleAddNewTask()}
           icon="add-circle-outline"  
           />
       </S.InputContainer>

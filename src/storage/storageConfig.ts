@@ -1,1 +1,1 @@
-const TEMPLATE_COLLECTION = '@ignite-todo-rc:template';
+export const TASKS_COLLECTION = '@ignite-todo-rc:tasks';

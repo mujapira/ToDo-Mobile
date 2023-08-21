@@ -3,17 +3,16 @@ import * as S from './styles';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components/native';
+import { ITask } from '@storage/tasks/getTasks';
 
-interface TaskProps {
-    id?: number;
-    isDone?: boolean;
-    title?: string;
+interface TaskProps extends ITask {
+    
 }
 
-export function Task({isDone = false, id}:TaskProps){
+export function Task({isDone = false, title }:TaskProps){
     const { COLORS } = useTheme()
     return (
-        <S.TaskContainer key={id}>
+        <S.TaskContainer>
             <S.ActionContainer>
                 <S.DoneButton isDone={isDone} onPress={()=> {}}>
                         <Ionicons name="checkmark-sharp" color={isDone ? COLORS.GRAY_100 : 'transparent'}/>
@@ -21,7 +20,7 @@ export function Task({isDone = false, id}:TaskProps){
             </S.ActionContainer>
 
             <S.Title isDone={isDone}>
-                Integer urna interdum massa libero auctor neque turpis turpis semper. semper. 
+                {title} 
             </S.Title>
 
             <S.ActionContainer>
